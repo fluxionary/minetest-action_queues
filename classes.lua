@@ -2,7 +2,7 @@ local deque_class = action_queues.util.class()
 
 -- inspired by https://www.lua.org/pil/11.4.html
 
-function deque_class:_new(def)
+function deque_class:_init(def)
 	self._a = 0
 	self._z = -1
 	self._m = def and def.max_size

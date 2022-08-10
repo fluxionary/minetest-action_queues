@@ -4,17 +4,21 @@ function util.class(super)
     local class = {}
 	class.__index = class
 
+	local meta = {
+		__call = function(...)
+	        local obj = setmetatable({}, class)
+	        if obj._init then
+	            obj:_init(...)
+	        end
+	        return obj
+	    end
+	}
+
 	if super then
-		setmetatable(class, {__index = super})
+		meta.__index = super
 	end
 
-    function class:__call(...)
-        local obj = setmetatable({}, class)
-        if obj._new then
-            obj:_new(...)
-        end
-        return obj
-    end
+	setmetatable(class, meta)
 
     return class
 end
