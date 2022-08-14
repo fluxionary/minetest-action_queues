@@ -17,5 +17,5 @@ action_queues = {
 }
 
 action_queues.dofile("util")
-action_queues.dofile("classes")
+action_queues.dofile("classes", "init")
 action_queues.dofile("api")
