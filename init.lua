@@ -2,7 +2,7 @@ local modname = minetest.get_current_modname()
 local modpath = minetest.get_modpath(modname)
 
 action_queues = {
-	version = os.time({year = 2022, month = 8, day = 9}),
+	version = os.time({year = 2022, month = 8, day = 16}),
 
 	modname = modname,
 	modpath = modpath,

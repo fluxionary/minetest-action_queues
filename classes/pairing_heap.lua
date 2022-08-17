@@ -48,22 +48,27 @@ local function merge_pairs(node)
 end
 
 local function cut(node)
-	local node2 = node.parent
-	if node2.child == self then
-		node2.child = node.sibling
+	local parent = node.parent
+
+	if parent.child == node then
+		parent.child = node.sibling
+
 	else
-		node2 = node2.child
-		local sibling = node2.sibling
+		parent = parent.child
+		local sibling = parent.sibling
 		while sibling ~= node do
-			node2 = sibling
-			sibling = node2.sibling
+			parent = sibling
+			sibling = parent.sibling
 		end
-		node2.sibling = node.sibling
+		parent.sibling = node.sibling
 	end
+
 	node.parent = nil
 	node.sibling = nil
 end
 
+-- TODO what is this and why is it not used
+--[[
 local function extract(node)
 	local children = {}
 	local node2 = node.child
@@ -97,6 +102,7 @@ local function extract(node)
 
 	return root
 end
+]]
 
 local pairing_heap_class = action_queues.util.class()
 
