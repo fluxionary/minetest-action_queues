@@ -26,6 +26,7 @@ stds.action_queues = {
 		"action_queues",
 	},
 	read_globals = {
+    	"futil",
 		"minetest",
 	},
 }

@@ -1,9 +1,9 @@
-local deque_class = action_queues.deque_class
+local Deque = futil.Deque
 
 local api = {}
 
 function api.create_serverstep_queue(params)
-	local deque = deque_class()
+	local deque = Deque()
 
 	if params.us_per_step then
 		minetest.register_globalstep(function()
