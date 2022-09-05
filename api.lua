@@ -6,7 +6,7 @@ function api.create_serverstep_queue(params)
 	local deque = Deque()
 
 	if params.us_per_step then
-		minetest.register_globalstep(function()
+		minetest.register_globalstep(function(dtime)
 			local get_us_time = minetest.get_us_time
 			local start = get_us_time()
 			local now = start
@@ -14,7 +14,9 @@ function api.create_serverstep_queue(params)
 			local us_per_step = params.us_per_step
 
 			while f and (now - start) < us_per_step do
-				f(now)
+				if f(params, dtime, now) then
+					break
+				end
 				f = deque:pop_front()
 				now = get_us_time()
 			end
@@ -22,15 +24,17 @@ function api.create_serverstep_queue(params)
 
 	elseif params.every_n_steps then
 		local steps = 0
-		minetest.register_globalstep(function()
+		minetest.register_globalstep(function(dtime)
 			steps = steps + 1
 
 			if steps < params.every_n_steps then
 				return
 			end
 
-			for _ = 1, math.min(params.num_per_step, deque:size()) do
-				deque:pop_front()(steps)
+			for i = 1, math.min(params.num_per_step, deque:size()) do
+				if deque:pop_front()(params, dtime, i) then
+					break
+				end
 			end
 
 			steps = 0
@@ -45,8 +49,10 @@ function api.create_serverstep_queue(params)
 				return
 			end
 
-			for _ = 1, math.min(params.num_per_step, deque:size()) do
-				deque:pop_front()(seconds)
+			for i = 1, math.min(params.num_per_step, deque:size()) do
+				if deque:pop_front()(params, dtime, i) then
+					break
+				end
 			end
 
 			seconds = 0
@@ -54,8 +60,10 @@ function api.create_serverstep_queue(params)
 
 	else
 		minetest.register_globalstep(function(dtime)
-			for _ = 1, math.min(params.num_per_step, deque:size()) do
-				deque:pop_front()(dtime)
+			for i = 1, math.min(params.num_per_step, deque:size()) do
+				if deque:pop_front()(params, dtime, i) then
+					break
+				end
 			end
 		end)
 	end
