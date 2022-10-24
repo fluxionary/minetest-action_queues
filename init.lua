@@ -1,6 +1,11 @@
 local modname = minetest.get_current_modname()
 local modpath = minetest.get_modpath(modname)
 
+assert(
+	type(futil.version) == "number" and futil.version >= os.time({year = 2022, month = 10, day = 24}),
+	"please update futil"
+)
+
 action_queues = {
 	version = os.time({year = 2022, month = 8, day = 16}),
 
