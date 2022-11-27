@@ -2,12 +2,12 @@ local modname = minetest.get_current_modname()
 local modpath = minetest.get_modpath(modname)
 
 assert(
-	type(futil.version) == "number" and futil.version >= os.time({year = 2022, month = 10, day = 24}),
+	type(futil.version) == "number" and futil.version >= os.time({ year = 2022, month = 10, day = 24 }),
 	"please update futil"
 )
 
 action_queues = {
-	version = os.time({year = 2022, month = 8, day = 16}),
+	version = os.time({ year = 2022, month = 8, day = 16 }),
 
 	modname = modname,
 	modpath = modpath,
@@ -17,7 +17,7 @@ action_queues = {
 	end,
 
 	dofile = function(...)
-		return dofile(table.concat({modpath, ...}, DIR_DELIM) .. ".lua")
+		return dofile(table.concat({ modpath, ... }, DIR_DELIM) .. ".lua")
 	end,
 }
 

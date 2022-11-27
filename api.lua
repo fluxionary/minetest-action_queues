@@ -21,7 +21,6 @@ function api.create_serverstep_queue(params)
 				now = get_us_time()
 			end
 		end)
-
 	elseif params.every_n_steps then
 		local steps = 0
 		minetest.register_globalstep(function(dtime)
@@ -39,7 +38,6 @@ function api.create_serverstep_queue(params)
 
 			steps = 0
 		end)
-
 	elseif params.every_n_seconds then
 		local seconds = 0
 		minetest.register_globalstep(function(dtime)
@@ -57,7 +55,6 @@ function api.create_serverstep_queue(params)
 
 			seconds = 0
 		end)
-
 	else
 		minetest.register_globalstep(function(dtime)
 			for i = 1, math.min(params.num_per_step, deque:size()) do
