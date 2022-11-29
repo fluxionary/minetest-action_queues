@@ -1,6 +1,6 @@
 # action_queues
 
-minetest mod which provides an API for queuing things for batch processing w/ various ways to specify the batch "size".
+provides an API for queuing things for batch processing w/ various ways to specify the batch "size".
 
 ## api
 

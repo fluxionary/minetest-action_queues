@@ -5,7 +5,7 @@ local api = {}
 function api.create_serverstep_queue(params)
 	local deque = Deque()
 
-	if params.us_per_step then
+	if params.us_per_step and params.us_per_step > 0 then
 		minetest.register_globalstep(function(dtime)
 			local get_us_time = minetest.get_us_time
 			local start = get_us_time()
@@ -21,7 +21,7 @@ function api.create_serverstep_queue(params)
 				now = get_us_time()
 			end
 		end)
-	elseif params.every_n_steps then
+	elseif params.every_n_steps and params.every_n_steps > 0 then
 		local steps = 0
 		minetest.register_globalstep(function(dtime)
 			steps = steps + 1
@@ -38,7 +38,7 @@ function api.create_serverstep_queue(params)
 
 			steps = 0
 		end)
-	elseif params.every_n_seconds then
+	elseif params.every_n_seconds and params.every_n_seconds > 0 then
 		local seconds = 0
 		minetest.register_globalstep(function(dtime)
 			seconds = dtime + 1
