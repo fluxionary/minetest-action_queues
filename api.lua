@@ -1,25 +1,36 @@
 local Deque = futil.Deque
 
-local api = {}
-
-function api.create_serverstep_queue(params)
+function action_queues.create_serverstep_queue(params)
 	local deque = Deque()
 
-	if params.us_per_step and params.us_per_step > 0 then
+	if params.us_per_step then
+		assert(params.us_per_step > 0)
+		local penalty = 0
 		minetest.register_globalstep(function(dtime)
+			local us_per_step = params.us_per_step
 			local get_us_time = minetest.get_us_time
 			local start = get_us_time()
-			local now = start
-			local f = deque:pop_front()
-			local us_per_step = params.us_per_step
+			local elapsed = 0
+			local actual_us_per_step = us_per_step - penalty
+			if actual_us_per_step <= 0 then
+				penalty = penalty - us_per_step
+				return
+			end
 
-			while f and (now - start) < us_per_step do
-				if f(params, dtime, now) then
+			local f = deque:pop_front()
+			while f and elapsed < actual_us_per_step do
+				if f(params, dtime, elapsed) then
 					break
 				end
 				f = deque:pop_front()
-				now = get_us_time()
+				elapsed = get_us_time() - start
 			end
+
+			-- we didn't run this, so put it back
+			if f then
+				deque:push_front(f)
+			end
+			penalty = math.max(0, elapsed - us_per_step)
 		end)
 	elseif params.every_n_steps and params.every_n_steps > 0 then
 		local steps = 0
@@ -55,7 +66,7 @@ function api.create_serverstep_queue(params)
 
 			seconds = 0
 		end)
-	else
+	elseif params.num_per_step then
 		minetest.register_globalstep(function(dtime)
 			for i = 1, math.min(params.num_per_step, deque:size()) do
 				if deque:pop_front()(params, dtime, i) then
@@ -63,9 +74,14 @@ function api.create_serverstep_queue(params)
 				end
 			end
 		end)
+	else
+		error(string.format("invalid action queue definition %s", dump(params)))
 	end
 
 	return deque
 end
 
-action_queues.api = api
+-- backwards compatibility
+action_queues.api = {
+	create_serverstep_queue = action_queues.create_serverstep_queue,
+}
