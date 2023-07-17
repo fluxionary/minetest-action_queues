@@ -30,7 +30,7 @@ function action_queues.create_serverstep_queue(params)
 			if f then
 				deque:push_front(f)
 			end
-			penalty = math.max(0, elapsed - us_per_step)
+			penalty = math.max(0, elapsed - actual_us_per_step)
 		end)
 	elseif params.every_n_steps and params.every_n_steps > 0 then
 		local steps = 0
