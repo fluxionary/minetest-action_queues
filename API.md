@@ -3,10 +3,10 @@
   `params` can be one of
   * `{us_per_step = n}`
     execute queued entries until n us (microseconds) have elapsed.
-  * `{every_n_steps = n, num_per_step = m}`
-    execute at most m queued entries every n server steps.
-  * `{every_n_seconds = n, num_per_step = m}`
-    execute at most m queued entries after at least n seconds have elapsed.
+  * `{every_n_steps = n [, num_per_step = m]}`
+    execute at most m (default: +∞) queued entries every n server steps.
+  * `{every_n_seconds = n [, num_per_step = m]}`
+    execute at most m (default: +∞) queued entries after at least n seconds have elapsed.
   * `{num_per_step = m}`
     execute at most m queued entries on each server step.
 

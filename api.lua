@@ -41,7 +41,7 @@ function action_queues.create_serverstep_queue(params)
 				return
 			end
 
-			for i = 1, math.min(params.num_per_step, deque:size()) do
+			for i = 1, math.min(params.num_per_step or math.huge, deque:size()) do
 				if deque:pop_front()(params, dtime, i) then
 					break
 				end
@@ -58,7 +58,7 @@ function action_queues.create_serverstep_queue(params)
 				return
 			end
 
-			for i = 1, math.min(params.num_per_step, deque:size()) do
+			for i = 1, math.min(params.num_per_step or math.huge, deque:size()) do
 				if deque:pop_front()(params, dtime, i) then
 					break
 				end
